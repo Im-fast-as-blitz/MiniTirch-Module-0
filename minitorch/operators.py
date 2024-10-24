@@ -3,7 +3,7 @@
 import math
 
 # ## Task 0.1
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Generator, Optional
 
 #
 # Implementation of a prelude of elementary functions.
@@ -115,4 +115,71 @@ def relu_back(x: float, d: float) -> float:
 # - prod: take the product of lists
 
 
-# TODO: Implement for Task 0.3.
+def map(func: Callable[[float], float], arr: Iterable[float]) -> Generator[float]:
+    for val in arr:
+        yield func(val)
+
+
+def zipWith(func: Callable[[float, float], float], arr1: Iterable[float], arr2: Iterable[float]) -> Generator[float]:
+    a_iter = iter(arr1)
+    b_iter = iter(arr2)
+
+    val_a = 0
+    val_b = 0
+
+    alive_a = True
+    alive_b = True
+    try:
+        val_a = next(a_iter)
+    except StopIteration:
+        alive_a = False
+    try:
+        val_b = next(b_iter)
+    except StopIteration:
+        alive_b = False
+    
+    while alive_a or alive_b:
+        if alive_a and alive_b:
+            yield func(val_a, val_b)
+            try:
+                val_a = next(a_iter)
+            except StopIteration:
+                alive_a = False
+            try:
+                val_b = next(b_iter)
+            except StopIteration:
+                alive_b = False
+        elif alive_a and not alive_b:
+            yield func(val_a, 0)
+            try:
+                val_a = next(a_iter)
+            except StopIteration:
+                alive_a = False
+        else:
+            yield func(0, val_b)
+            try:
+                val_b = next(b_iter)
+            except StopIteration:
+                alive_b = False
+
+
+def reduce(arr1:Iterable[float], func: Callable[[float, float], float], start: float) -> float:
+    for val in arr1:
+        start = func(start, val)
+    return start
+
+
+def negList(arr: Iterable[float]) -> Iterable[float]:
+    return list(map(neg, arr))
+
+
+def addLists(arr1: Iterable[float], arr2: Iterable[float]) -> Iterable[float]:
+    return list(zipWith(add, arr1, arr2))
+
+
+def sum(arr: Iterable[float]) -> float:
+    return reduce(arr, add, 0)
+
+
+def prod(arr: Iterable[float]) -> float:
+    return reduce(arr, mul, 1)
