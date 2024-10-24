@@ -9,22 +9,22 @@ from typing import Callable, Iterable
 # Implementation of a prelude of elementary functions.
 
 # Mathematical functions:
-# - mul
-# - id
-# - add
-# - neg
-# - lt
-# - eq
-# - max
-# - is_close
-# - sigmoid
-# - relu
-# - log
-# - exp
-# - log_back
-# - inv
-# - inv_back
-# - relu_back
+# - mul +
+# - id +
+# - add +
+# - neg +
+# - lt +
+# - eq +
+# - max +
+# - is_close +
+# - sigmoid +
+# - relu +
+# - log +
+# - exp +
+# - log_back +
+# - inv +
+# - inv_back +
+# - relu_back +
 #
 # For sigmoid calculate as:
 # $f(x) =  \frac{1.0}{(1.0 + e^{-x})}$ if x >=0 else $\frac{e^x}{(1.0 + e^{x})}$
@@ -32,7 +32,71 @@ from typing import Callable, Iterable
 # $f(x) = |x - y| < 1e-2$
 
 
-# TODO: Implement for Task 0.1.
+def mul(x: float, y: float) -> float:
+    return x * y
+
+
+def id(x: float) -> float:
+    return x
+
+
+def add(x: float, y: float) -> float:
+    return x + y
+
+
+def neg(x: float) -> float:
+    return -x
+
+
+def lt(x: float, y: float) -> bool:
+    return x < y
+
+
+def eq(x: float, y: float) -> bool:
+    return x == y
+
+def max(x: float, y: float) -> float:
+    return x if x > y else y
+
+def min(x: float, y: float) -> float:
+    return x if x < y else y
+
+
+def is_close(x: float, y: float) -> bool:
+    return (max(x, y) - min(x, y)) < 1e-2
+
+
+def sigmoid(x: float) -> float:
+    if x >= 0:
+        return 1 / (1 + exp(neg(x)))
+    return exp(x) / (1 + exp(x))
+
+
+def relu(x: float) -> float:
+    return max(x, 0)
+
+def log(x: float) -> float:
+    return math.log(x + 1e-6)
+
+
+def exp(x: float) -> float:
+    return math.exp(x)
+
+
+def log_back(x: float, d: float) -> float:
+    return mul(d, inv(x))
+
+
+def inv(x: float) -> float:
+    return 1 / x
+
+
+def inv_back(x: float, d: float) -> float:
+    return mul(d, neg(inv(mul(x, x))))
+
+
+def relu_back(x: float, d: float) -> float:
+    return mul(d, 0 if x <= 0 else 1)
 
 
 # ## Task 0.3
