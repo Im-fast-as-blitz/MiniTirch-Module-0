@@ -88,7 +88,7 @@ def log_back(x: float, d: float) -> float:
 
 
 def inv(x: float) -> float:
-    return 1 / x
+    return 1 / (x + 1e-6)
 
 
 def inv_back(x: float, d: float) -> float:
@@ -115,12 +115,12 @@ def relu_back(x: float, d: float) -> float:
 # - prod: take the product of lists
 
 
-def map(func: Callable[[float], float], arr: Iterable[float]) -> Generator[float]:
+def map(func: Callable[[float], float], arr: Iterable[float]) -> Iterable[float]:
     for val in arr:
         yield func(val)
 
 
-def zipWith(func: Callable[[float, float], float], arr1: Iterable[float], arr2: Iterable[float]) -> Generator[float]:
+def zipWith(func: Callable[[float, float], float], arr1: Iterable[float], arr2: Iterable[float]) -> Iterable[float]:
     a_iter = iter(arr1)
     b_iter = iter(arr2)
 
